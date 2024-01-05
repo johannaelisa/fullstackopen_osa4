@@ -1,7 +1,8 @@
-const Blog = ({ blog }) => {
+const Blog = ({ blog, deleteBlog }) => {
   return (
-    <li><strong>{blog.title}</strong>: {blog.author} {blog.url}, Likes: {blog.likes}</li>
+    <li>{blog.title} {blog.author} {blog.url}, Likes: {blog.likes}
+    <button onClick={() => deleteBlog(blog.id)}>Delete</button>
+    </li>
   )
 }
-
 export default Blog
