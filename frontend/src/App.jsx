@@ -1,12 +1,22 @@
-import Note from './components/Note'
+import { useState, useEffect } from 'react'
+import Blog from './components/Blog'
+import blogService from './services/blogs'
 
-const App = ({ notes }) => {
+const App = ({ blogs }) => {
+  const [blogList, setBlogList] = useState([])
+
+  useEffect(() => {
+    blogService.getAll().then(blogs =>
+      setBlogList( blogs )
+    )  
+  }, [])
+
   return (
     <div>
-      <h1>Notes</h1>
+      <h1>My Blogs</h1>
       <ul>
-        {notes.map(note => 
-          <Note key={note.id} note={note} />
+        {blogList.map(blog => 
+          <Blog key={blog.id} blog={blog} />
         )}
       </ul>
     </div>

@@ -2,13 +2,7 @@ const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
 
 blogsRouter.get('/', (request, response) => {
-  Blog.find({}).then(blogs => {
-    response.json(blogs)
-  })
-})
-
-blogsRouter.get('/api/blogs', (request, response) => {
-  console.log('Handling GET request to /api/notes')
+  console.log('Tötteröö 1')
   Blog
     .find({})
     .then(blogs => {
@@ -16,13 +10,21 @@ blogsRouter.get('/api/blogs', (request, response) => {
     })
 })
 
-blogsRouter.post('/api/blogs', (request, response) => {
-  const blog = new Blog(request.body)
+blogsRouter.post('/', (request, response) => {
+  const body = request.body
+  console.log('Tötteröö 2')
+  console.log('Received raw data:', body)
 
-  blog
-    .save()
-    .then(result => {
-      response.status(201).json(result)
+  const newBlog = new Blog({
+    title: body.title,
+    author: body.author,
+    url: body.url,
+    likes: body.likes,
+  })
+
+  return newBlog.save()
+    .then(savedBlog => {
+      response.json(savedBlog)
     })
 })
 
