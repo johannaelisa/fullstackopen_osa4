@@ -78,7 +78,6 @@ const App = ({ blogs }) => {
       .then(() => {
         blogService.getAll().then((updatedBlogs) => {
           setBlogList(updatedBlogs)
-          console.log("Huhhahhei")
         });
         console.log('Uusi luotu')
         setSuccessMessage(`Verily, the novel addition of a Blog hath been successfully appended unto the esteemed register.`);
