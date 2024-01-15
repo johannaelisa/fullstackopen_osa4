@@ -12,11 +12,6 @@ const App = ({ blogs }) => {
   const [successMessage, setSuccessMessage] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
 
-  const deleteBlog = (id) => {
-    console.log('Poistetaan Blogi')
-    setBlogList(blogList.filter(blog => blog.id !== id));
-  };
-
   const handleTitleChange = (event) => {
     console.log('Title changed:', event.target.value)
     setNewTitle(event.target.value)
@@ -90,12 +85,54 @@ const App = ({ blogs }) => {
       })
       .catch(error => {
         console.error('Error:', error);
-        setErrorMessage(`${error.response.data.error}`);
+        setErrorMessage(`${error.response.data.error}`)
         setTimeout(() => {
-          setErrorMessage(null);
-        }, 7000);
-      });
+          setErrorMessage(null)
+        }, 7000)
+      })
     }
+  }
+
+  const deleteBlog = id => {
+    if (window.confirm(`Confirm the removal`)) {
+      blogService
+      .remove(id)
+      .then(() => {
+        setBlogList(blogList.filter(blog => blog.id !== id))
+        setSuccessMessage(`Blog successfully removed from the list.`)
+        setTimeout(() => {
+          setSuccessMessage(null)
+        }, 5000)
+      })
+      .catch(error => {
+        console.error('Error deleting blog:', error)
+        setErrorMessage('Error while deleting a blog from the list')
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+      })
+    }
+  }
+
+  const likeBlog = id => {
+    const findBlog = blogList.find(n => n.id === id)
+    if (findBlog) {    
+      if (window.confirm(`Confirm the like`)) {
+        console.log('Tykätään')
+          const changedBlog = { ...findBlog, likes: findBlog.likes + 1}
+          blogService
+          .update(findBlog.id, changedBlog)
+          .then(() => {
+            blogService.getAll().then((updatedBlogs) => {
+              setBlogList(updatedBlogs)
+            })
+        })
+        .catch(error => {
+          console.error('Error deleting blog:', error)
+        })
+      }
+    }
+
   }
 
   return (
@@ -104,18 +141,18 @@ const App = ({ blogs }) => {
       <Notification message={successMessage} type="success" />
       <Notification message={errorMessage} type="error" />
       <Form 
-          newTitle={newTitle} 
-          newAuthor={newAuthor} 
-          newUrl={newUrl}
-          handleTitleChange={handleTitleChange}
-          handleAuthorChange={handleAuthorChange}
-          handleUrlChange={handleUrlChange}
-          addBlog={addBlog} 
-          />
+        newTitle={newTitle} 
+        newAuthor={newAuthor} 
+        newUrl={newUrl}
+        handleTitleChange={handleTitleChange}
+        handleAuthorChange={handleAuthorChange}
+        handleUrlChange={handleUrlChange}
+        addBlog={addBlog} 
+        />
       <h3>My favorite blogs</h3>
       <ul>
         {blogList.map(blog => 
-          <Blog key={blog.id} blog={blog} deleteBlog={() => deleteBlog(blog.id)} />
+          <Blog key={blog.id} blog={blog} likeBlog={() => likeBlog(blog.id)} deleteBlog={() => deleteBlog(blog.id)} />
         )}
       </ul>
     </div>
