@@ -6,7 +6,7 @@ const api = supertest(app)
 
 const Blog = require('../models/blog')
 
-describe('when there is initially some notes saved', () => {
+describe('when there is initially some blogs saved', () => {
   beforeEach(async () => {
     await Blog.deleteMany({})
     let blogsToDb = helper.initialBlogs.map(blog => new Blog(blog))
@@ -26,7 +26,7 @@ describe('when there is initially some notes saved', () => {
   }, 10000)
 
 
-  test('the first note is about ensuring that magic happens', async () => {
+  test('the first blog is about ensuring that magic happens', async () => {
     const response = await api.get('/api/blogs')
     expect(response.body[0].title).toContain('Ensure that everything still works')
   }, 10000)
