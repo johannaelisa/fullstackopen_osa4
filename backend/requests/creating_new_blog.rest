@@ -1,5 +1,6 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ik1pbm5pIEhpaXJpIiwiaWQiOiI2NWQ3NGViMjQ5Yjc2MWQ3NzRhMDU3NjMiLCJpYXQiOjE3MDg2ODI1MzZ9.DtCOz7xjIwZC7Tj7-UzO8i19i8gUuYXA49azHi-6w3Q
 
 {
   "title": "Hello World", "author": "Hessu Hopo", "url": "http://example.com", "likes": 2

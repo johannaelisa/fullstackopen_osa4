@@ -62,6 +62,36 @@ describe('when there is initially some blogs saved', () => {
   })
 
   describe('addition of a new blog', () => {
+    let firstUser
+
+    beforeEach(async () => {
+      firstUser = await helper.usersInDb(0)
+    })
+
+    test('a new blog is linked to a user', async () => {
+      console.log('firstUser', firstUser)
+
+      const newBlog = {
+        title: 'We are using the populate method here."',
+        author: 'Minni Hiiri',
+        user: firstUser,
+        url: 'https://fullstackopen.com',
+        likes: 0
+      }
+      console.log('Uusi blogi', newBlog)
+      await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(201)
+        .expect('Content-Type', /application\/json/)
+
+      const response = await api.get('/api/blogs')
+
+      const newBlogUser= response.body.map(r => r.user).filter(user => user !== undefined)
+
+      expect(response.body).toHaveLength(helper.initialBlogs.length + 1)
+      expect(newBlogUser).toHaveLength(1)
+    })
     test('a new blog can be added', async () => {
       const newBlog = {
         title: 'async/await simplifies making async calls',
